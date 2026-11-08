@@ -12,12 +12,18 @@
     }
   },
   "scripts": {
-    "dev:api": "pnpm --filter @click-stream/api dev",
+    "build": "pnpm -r build",
+    "build:dashboard": "pnpm --filter @click-stream/dashboard build",
+    "build:api": "pnpm --filter @click-stream/api build",
     "build:sdk": "pnpm --filter @click-stream/sdk build",
     "build:db": "pnpm --filter @click-stream/db build",
-    "build": "pnpm -r build",
+    "build:shared": "pnpm --filter @click-stream/shared build",
+    "dev": "pnpm --parallel --filter @click-stream/api --filter @click-stream/dashboard dev",
+    "dev:dashboard": "pnpm --filter @click-stream/dashboard dev",
+    "dev:api": "pnpm --filter @click-stream/api dev",
     "lint": "pnpm -r lint",
     "format": "prettier --write .",
+    "clean": "pnpm -r exec rm -rf dist",
     "prepare": "husky"
   },
   "lint-staged": {
