@@ -10,9 +10,10 @@
     ClickStream is an open-source, SDK-based analytics platform that enables businesses to track, collect, and analyze user interactions across their websites. It provides insights into web analytics, user behavior and engagement, with access to raw event data for deeper analysis and custom reporting.
 </p>
 
-<h3 align="center">
-    <a href="https://clickstream.manishb.in"><ins>ClickStream</ins></a>
-</h3>
+<p align="center">
+  <a href="https://clickstream.manishb.in"><b>ClickStream</b></a> |
+  <a href="./packages/sdk/"><b>SDK Setup</b></a>
+</p>
 
 <p align="center"> 
   <img src="https://assets.clickstream.manishb.in/assets/cs_readme_hero.png" alt="clickstream hero image" width="960"/>
