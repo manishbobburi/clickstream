@@ -49,68 +49,45 @@ class AnalyticsRepository {
     referrer: 'referrer',
   } as const;
 
+  async getOverview(filters: OverviewFilters) {
+    const { orgId, from, to } = filters;
+
+    const where = Prisma.sql`
+            WHERE org_id = ${orgId}
+            ${from ? Prisma.sql`AND timestamp >= ${from}` : Prisma.empty}
+            ${to ? Prisma.sql`AND timestamp < ${to}` : Prisma.empty}
+        `;
+
+    const result = await prisma.$queryRaw<
+      {
+        totalEvents: bigint;
+        uniqueUsers: bigint;
+        anonymousUsers: bigint;
+        sessions: bigint;
+      }[]
+    >(Prisma.sql`
+      SELECT
+        COUNT(*) AS "totalEvents",
+        COUNT(DISTINCT user_id) FILTER (WHERE user_id IS NOT NULL) AS "uniqueUsers",
+        COUNT(DISTINCT anon_id) FILTER (WHERE user_id IS NULL AND anon_id IS NOT NULL) AS "anonymousUsers",
+        COUNT(DISTINCT session_id) AS "sessions"
+      FROM events ${where};
+    `);
+
+    const overview = result[0];
+
+    return {
+      totalEvents: Number(overview.totalEvents),
+      uniqueUsers: Number(overview.uniqueUsers),
+      anonymousUsers: Number(overview.anonymousUsers),
+      sessions: Number(overview.sessions),
+    };
+  }
+
   async getTotalEvents(filters: OverviewFilters) {
     return prisma.event.count({
       where: this.buildWhere(filters),
     });
-  }
-
-  async getUniqueUsers(filters: OverviewFilters) {
-    const { orgId, from, to } = filters;
-
-    const where = Prisma.sql`
-            WHERE org_id = ${orgId}
-            ${from ? Prisma.sql`AND timestamp >= ${from}` : Prisma.empty}
-            ${to ? Prisma.sql`AND timestamp < ${to}` : Prisma.empty}
-        `;
-
-    const result = await prisma.$queryRaw<{ count: bigint }[]>`
-            SELECT COUNT(DISTINCT user_id) AS count
-            FROM events ${where}
-            AND user_id IS NOT NULL
-        `;
-
-    return Number(result[0].count);
-  }
-
-  async getAnanonymousUsers(filters: OverviewFilters) {
-    const { orgId, from, to } = filters;
-
-    const where = Prisma.sql`
-      WHERE org_id = ${orgId}
-      ${from ? Prisma.sql`AND timestamp >= ${from}` : Prisma.empty}
-      ${to ? Prisma.sql`AND timestamp < ${to}` : Prisma.empty}
-      AND user_id IS NULL
-      AND anon_id IS NOT NULL
-    `;
-
-    const result = await prisma.$queryRaw<{ count: bigint }[]>`
-      SELECT COUNT(*)
-      FROM (
-        SELECT DISTINCT anon_id
-        FROM events
-        ${where}
-      ) AS distinct_users
-    `;
-
-    return Number(result[0].count);
-  }
-
-  async getSessionCount(filters: OverviewFilters) {
-    const { orgId, from, to } = filters;
-
-    const where = Prisma.sql`
-            WHERE org_id = ${orgId}
-            ${from ? Prisma.sql`AND timestamp >= ${from}` : Prisma.empty}
-            ${to ? Prisma.sql`AND timestamp < ${to}` : Prisma.empty}
-        `;
-
-    const result = await prisma.$queryRaw<{ count: bigint }[]>`
-            SELECT COUNT(DISTINCT session_id) AS count
-            FROM events ${where}
-        `;
-
-    return Number(result[0].count);
   }
 
   async getEventTrend(query: EventTrendQuery) {

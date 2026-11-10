@@ -25,19 +25,9 @@ async function getOverview(orgId: string, query: OverviewQuery): Promise<Overvie
     to,
   };
 
-  const [totalEvents, uniqueUsers, anonymousUsers, sessions] = await Promise.all([
-    analyticsRepository.getTotalEvents(filters),
-    analyticsRepository.getUniqueUsers(filters),
-    analyticsRepository.getAnanonymousUsers(filters),
-    analyticsRepository.getSessionCount(filters),
-  ]);
+  const overview = await analyticsRepository.getOverview(filters);
 
-  return {
-    totalEvents,
-    uniqueUsers,
-    anonymousUsers,
-    sessions,
-  };
+  return overview;
 }
 
 async function getEventTrend(query: EventTrendQuery): Promise<EventTrendResponse> {
