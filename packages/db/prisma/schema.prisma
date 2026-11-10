@@ -49,13 +49,6 @@ model Event {
 
   @@unique([orgId, eventId])
   @@index([orgId, timestamp])
-  @@index([orgId, event])
-  @@index([orgId, userId, timestamp])
-  @@index([orgId, anonId, timestamp])
-  @@index([orgId, sessionId, timestamp])
-  @@index([orgId, browserName])
-  @@index([orgId, osName])
-  @@index([orgId, deviceType])
   @@map("events")
 }
 
