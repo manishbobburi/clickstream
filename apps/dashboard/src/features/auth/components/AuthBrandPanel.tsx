@@ -6,7 +6,7 @@ export function AuthBrandPanel() {
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Logo />
-          <span className="text-xl font-semibold tracking-tight">Click Stream</span>
+          <span className="text-xl font-semibold tracking-tight">ClickStream</span>
         </div>
       </div>
     </aside>

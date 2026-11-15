@@ -27,12 +27,12 @@ export function AppSidebar() {
           <Link
             to="/"
             onClick={handleLogoClick}
-            className="flex h-10 w-full items-center gap-3 rounded-md px-2 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
+            className="flex h-10 w-full items-center gap-2 rounded-md px-2 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
           >
             <Logo />
 
             <span className="truncate text-lg font-semibold group-data-[collapsible=icon]:hidden">
-              Click Stream
+              ClickStream
             </span>
           </Link>
         </div>
