@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 import { QueryError } from '@/components/common/QueryError';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -62,24 +62,16 @@ export function EventTrend() {
 
       <CardContent>
         <ChartContainer config={chartConfig} className="h-80 w-full">
-          <AreaChart
+          <BarChart
             accessibilityLayer
             data={chartData}
             margin={{
-              top: 12,
-              right: 12,
-              left: 12,
-              bottom: 12,
+              top: 8,
+              right: 8,
+              left: 8,
+              bottom: 8,
             }}
           >
-            <defs>
-              <linearGradient id="eventTrendGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="var(--color-events)" stopOpacity={0.2} />
-
-                <stop offset="100%" stopColor="var(--color-events)" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-
             <CartesianGrid vertical={false} strokeDasharray="3 3" />
 
             <XAxis
@@ -106,18 +98,15 @@ export function EventTrend() {
               }
             />
 
-            <Area
+            <Bar
               dataKey="events"
               type="monotone"
               stroke="var(--color-events)"
-              strokeWidth={2}
-              fill="url(#eventTrendGradient)"
-              dot={false}
-              activeDot={{
-                r: 4,
-              }}
+              strokeWidth={0.5}
+              fill="var(--color-events)"
+              radius={[6, 6, 0, 0]}
             />
-          </AreaChart>
+          </BarChart>
         </ChartContainer>
       </CardContent>
     </Card>
