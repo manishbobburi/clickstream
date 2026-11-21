@@ -1,14 +1,6 @@
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from 'recharts';
-
 import { Skeleton } from '@/components/ui/skeleton';
 import { QueryError } from '@/components/common/QueryError';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  type ChartConfig,
-} from '@/components/ui/chart';
 import {
   Select,
   SelectContent,
@@ -16,17 +8,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { formatCompactNumber } from '@/lib/utils';
 
 import { useTopPages } from '../hooks';
 import type { TopPagesPreset } from '../types';
 import { TOP_PAGES_LABELS } from '../top-pages';
-
-const chartConfig = {
-  count: {
-    label: 'Page views',
-    color: 'var(--foreground)',
-  },
-} satisfies ChartConfig;
+import { AnalyticsList, AnalyticsListSkeleton, type AnalyticsListItem } from './AnalyticsList';
 
 export function TopPages() {
   const { data, isPending, isError, refetch, k, setK } = useTopPages();
@@ -39,65 +26,27 @@ export function TopPages() {
     return <QueryError onRetry={refetch} />;
   }
 
-  const chartData = data.topPages;
+  const items: AnalyticsListItem[] = data.topPages.map((item) => ({
+    key: item.page,
+    label: item.page || '/',
+    count: item.count,
+  }));
 
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
-        <div className="flex flex-1 flex-col justify-center gap-1 px-6 pb-3 sm:pb-0">
-          <CardTitle>Top Pages</CardTitle>
-          <CardDescription>Total page view {data.totalPageViews}</CardDescription>
+        <div className="flex flex-1 flex-col justify-center gap-1">
+          <CardTitle>Page Views</CardTitle>
+          <CardDescription>
+            Total page views: {formatCompactNumber(data.totalPageViews)}
+          </CardDescription>
         </div>
 
         <TopKSelect value={k} onChange={setK} />
       </CardHeader>
 
       <CardContent>
-        <ChartContainer config={chartConfig} className="h-65 w-full">
-          <BarChart
-            accessibilityLayer
-            data={chartData}
-            layout="vertical"
-            margin={{
-              top: 8,
-              right: 48,
-              left: 8,
-              bottom: 8,
-            }}
-          >
-            <CartesianGrid horizontal={false} strokeDasharray="3 3" />
-
-            <XAxis
-              type="number"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickFormatter={(value) => value.toLocaleString()}
-            />
-
-            <YAxis
-              type="category"
-              dataKey="page"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={10}
-              width={80}
-              tick={{ fontSize: 12 }}
-            />
-
-            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
-
-            <Bar dataKey="count" fill="var(--color-count)" radius={[0, 6, 6, 0]} barSize={28}>
-              <LabelList
-                dataKey="count"
-                position="right"
-                offset={8}
-                formatter={(value) => Number(value).toLocaleString()}
-                fill="var(--foreground)"
-              />
-            </Bar>
-          </BarChart>
-        </ChartContainer>
+        <AnalyticsList items={items} emptyMessage="No page views recorded" />
       </CardContent>
     </Card>
   );
@@ -140,7 +89,7 @@ function TopPagesSkeleton() {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
-        <div className="space-y-2">
+        <div className="flex flex-1 flex-col justify-center gap-1">
           <Skeleton className="h-5 w-24" />
           <Skeleton className="h-4 w-32" />
         </div>
@@ -149,15 +98,7 @@ function TopPagesSkeleton() {
       </CardHeader>
 
       <CardContent>
-        <div className="h-65 space-y-4 pt-4">
-          {[72, 100, 84, 58, 76].map((width, index) => (
-            <div key={index} className="flex items-center gap-3">
-              <Skeleton className="h-4 w-16 shrink-0" />
-
-              <Skeleton className="h-7" style={{ width: `${width}%` }} />
-            </div>
-          ))}
-        </div>
+        <AnalyticsListSkeleton />
       </CardContent>
     </Card>
   );
