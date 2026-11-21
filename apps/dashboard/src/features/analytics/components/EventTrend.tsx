@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { formatCompactNumber } from '@/lib/utils';
 
 import { EVENT_TREND_INTERVAL_LABELS, formatDateRangeDescription } from '../event-trend';
 import { useEventTrend, useDashboardDateRange } from '../hooks';
@@ -51,7 +52,7 @@ export function EventTrend() {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
-        <div className="flex flex-1 flex-col justify-center gap-1 px-6 pb-3 sm:pb-0">
+        <div className="flex flex-1 flex-col justify-center gap-1">
           <CardTitle>Event Trend</CardTitle>
           <CardDescription>
             {formatDateRangeDescription(resolvedDateRange.from, resolvedDateRange.to)}
@@ -83,7 +84,13 @@ export function EventTrend() {
               tickFormatter={(value) => formatXAxisValue(new Date(value), interval)}
             />
 
-            <YAxis tickLine={false} axisLine={false} tickMargin={8} allowDecimals={false} />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              allowDecimals={false}
+              tickFormatter={(value) => formatCompactNumber(Number(value))}
+            />
 
             <ChartTooltip
               cursor={false}
@@ -93,6 +100,29 @@ export function EventTrend() {
                     const period = payload?.[0]?.payload?.period;
                     if (typeof period !== 'string') return '';
                     return formatTooltipValue(new Date(period), interval);
+                  }}
+                  formatter={(value, name, item) => {
+                    const indicatorColor =
+                      item.payload?.fill ?? item.color ?? 'var(--color-events)';
+                    return (
+                      <>
+                        <div
+                          className="h-2.5 w-2.5 shrink-0 rounded-[2px]"
+                          style={{
+                            backgroundColor: indicatorColor,
+                            borderColor: indicatorColor,
+                          }}
+                        />
+                        <div className="flex flex-1 items-center justify-between leading-none">
+                          <span className="text-muted-foreground">
+                            {chartConfig[name as keyof typeof chartConfig]?.label ?? name}
+                          </span>
+                          <span className="font-mono font-medium text-foreground tabular-nums">
+                            {formatCompactNumber(Number(value))}
+                          </span>
+                        </div>
+                      </>
+                    );
                   }}
                 />
               }
