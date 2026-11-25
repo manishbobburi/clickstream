@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu } from 'lucide-react';
 import { Logo } from '@/components/common/Logo';
 import { GithubIcon } from '@/components/common/Icons';
@@ -27,6 +28,8 @@ export function MobileNav({
   loginUrl = APP_URLS.login,
 }: MobileNavProps) {
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+  const isDocs = location.pathname.startsWith('/docs');
 
   const handleLinkClick = () => {
     setOpen(false);
@@ -52,9 +55,10 @@ export function MobileNav({
           <div>
             <SheetHeader className="p-0 pb-6 border-b border-border/40 text-left">
               <SheetTitle>
-                <a href="/" onClick={handleLinkClick} className="flex items-center">
+                <Link to="/" onClick={handleLinkClick} className="flex items-center">
                   <Logo />
-                </a>
+                  <h1 className="font-semibold text-xl mr-2">ClickStream</h1>
+                </Link>
               </SheetTitle>
               <SheetDescription className="sr-only">
                 Navigation links for ClickStream
@@ -62,13 +66,23 @@ export function MobileNav({
             </SheetHeader>
 
             <nav className="flex flex-col gap-1 pt-6">
-              <a
-                href={docsUrl}
-                onClick={handleLinkClick}
-                className="flex items-center rounded-md px-3 py-2.5 text-base font-medium text-foreground hover:bg-muted transition-colors"
-              >
-                Docs
-              </a>
+              {isDocs ? (
+                <Link
+                  to="/"
+                  onClick={handleLinkClick}
+                  className="flex items-center rounded-md px-3 py-2.5 text-base font-medium text-foreground hover:bg-muted transition-colors"
+                >
+                  Home
+                </Link>
+              ) : (
+                <Link
+                  to={docsUrl}
+                  onClick={handleLinkClick}
+                  className="flex items-center rounded-md px-3 py-2.5 text-base font-medium text-foreground hover:bg-muted transition-colors"
+                >
+                  Documentation
+                </Link>
+              )}
 
               <a
                 href={dashboardUrl}
