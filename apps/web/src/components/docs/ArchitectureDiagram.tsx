@@ -61,7 +61,6 @@ export function ArchitectureDiagram({ className }: { className?: string }) {
     >
       <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
         {STAGES.map((stage) => {
-          const Icon = stage.icon;
           return (
             <Card
               key={stage.step}

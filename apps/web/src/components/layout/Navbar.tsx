@@ -7,6 +7,7 @@ import { APP_URLS } from '@/config/urls';
 import { MobileNav } from './MobileNav';
 import { cn } from '@/lib/utils';
 import { SidebarTrigger } from '@/components/ui/sidebar';
+import { ThemeMenu } from '@/components/theme/ThemeMenu';
 
 interface NavbarProps {
   loginUrl?: string;
@@ -61,6 +62,8 @@ export function Navbar({
             paddingRight: 'max(2rem, calc((100vw - 80rem) / 2 + 2rem))',
           }}
         >
+          <ThemeMenu />
+
           <a
             href={githubUrl}
             target="_blank"
@@ -94,7 +97,8 @@ export function Navbar({
           </a>
         </div>
 
-        <div className="px-4 md:hidden">
+        <div className="flex items-center gap-1 px-4 md:hidden">
+          <ThemeMenu />
           <MobileNav
             // docsUrl={docsUrl}
             githubUrl={githubUrl}
@@ -139,6 +143,8 @@ export function Navbar({
         </div>
 
         <div className="hidden md:flex items-center gap-3 sm:gap-4">
+          <ThemeMenu />
+
           <a
             href={githubUrl}
             target="_blank"
@@ -172,12 +178,15 @@ export function Navbar({
           </a>
         </div>
 
-        <MobileNav
-          docsUrl={docsUrl}
-          githubUrl={githubUrl}
-          dashboardUrl={dashboardUrl}
-          loginUrl={loginUrl}
-        />
+        <div className="flex items-center gap-1 md:hidden">
+          <ThemeMenu />
+          <MobileNav
+            docsUrl={docsUrl}
+            githubUrl={githubUrl}
+            dashboardUrl={dashboardUrl}
+            loginUrl={loginUrl}
+          />
+        </div>
       </div>
     </header>
   );
