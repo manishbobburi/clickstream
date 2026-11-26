@@ -7,9 +7,6 @@ export function LandingPage() {
       <Navbar />
       <main className="flex-1 flex flex-col justify-center pt-18">
         <Hero />
-        <Hero />
-        <Hero />
-        <Hero />
       </main>
     </div>
   );
