@@ -70,9 +70,6 @@ export function ArchitectureDiagram({ className }: { className?: string }) {
             >
               <CardHeader className="gap-x-3 gap-y-0.5">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="flex size-8 shrink-0 items-center justify-center rounded-md border border-border bg-background text-foreground">
-                    <Icon className="size-4" />
-                  </div>
                   <div className="min-w-0">
                     <CardTitle className="leading-tight">{stage.title}</CardTitle>
                     <CardDescription className="text-xs mt-0.5">{stage.subtitle}</CardDescription>
